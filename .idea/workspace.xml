@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5e9bbf5b-c4e9-444b-96da-1019049e3459" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="userSettingsFile" value="C:\Program Files\Java\apache-maven-3.6.3\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1nk0gpOx5pPgrsRppbDRkplvCyq" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="fileTemplates" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\apache-tomcat-8.5.37\webapps\note" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5e9bbf5b-c4e9-444b-96da-1019049e3459" name="Default Changelist" comment="" />
+      <created>1611918894826</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1611918894826</updated>
+      <workItem from="1611918896147" duration="4012000" />
+      <workItem from="1611923360534" duration="3095000" />
+      <workItem from="1612004868069" duration="2496000" />
+      <workItem from="1612086280567" duration="8130000" />
+      <workItem from="1612097934621" duration="146000" />
+      <workItem from="1612241616506" duration="501000" />
+      <workItem from="1612263224065" duration="738000" />
+      <workItem from="1612264918835" duration="5513000" />
+      <workItem from="1612327856466" duration="182000" />
+      <workItem from="1612350386675" duration="367000" />
+      <workItem from="1612351508135" duration="3719000" />
+      <workItem from="1612359884389" duration="100000" />
+      <workItem from="1612414364384" duration="1363000" />
+      <workItem from="1612417638129" duration="16000" />
+      <workItem from="1612442581959" duration="186000" />
+      <workItem from="1612443027841" duration="1534000" />
+      <workItem from="1613906736635" duration="14000" />
+      <workItem from="1613970792458" duration="1742000" />
+      <workItem from="1614042518439" duration="7000" />
+      <workItem from="1614072016587" duration="5956000" />
+      <workItem from="1618818900445" duration="227000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>My 云笔记</title>
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css">
+    <!-- 编辑器样式  -->
+    <link rel="stylesheet" href="css/easyeditor.css">
+    <!-- 图标  -->
+    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_2356771_3eaiv2gdkow.css"/>
+    <style>
+        .add a{
+            font-size: 24px;
+            text-align: center;
+        }
+        /*css代码*/
+        #menu{
+            z-index: 999;
+            width: 0;       /*设置为0 隐藏自定义菜单*/
+            height: 55px;
+            overflow: hidden;      /*隐藏溢出的元素*/
+            box-shadow: 0 1px 1px #888,1px 0 1px #ccc;
+            background-color: #fff;
+            position: absolute;      /*自定义菜单相对与body元素进行定位*/
+            line-height: 36px;
+            padding: 5px 0;
+            text-align: center;
+            color: #fff;
+            color: rgba(255,255,255,.7);
+            transition: all .3s;
+            -webkit-transition: all .3s;
+        }
+        .menu{
+            height: 25px;
+            line-height: 25px;
+            padding: 0 10px;
+            font-size: 14px;
+        }
+        .menu:hover{
+            background-color: #f2f2f2;
+        }
+        .menu a{
+            cursor: pointer;
+        }
+
+</style>
+</head>
+
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">My 云笔记</div>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item" id="logout"><a>退了</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" id="menus">
+                <li class="layui-nav-item" data-id="1"><a>test1</a></li>
+                <li class="layui-nav-item" data-id="2"><a>test2</a></li>
+                <li class="layui-nav-item" data-id="3"><a>test3</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px; height: 90%;">
+            <div class="layui-form" lay-filter="markdown" style="height: 100%">
+                <!-- Markdown编辑器元素 -->
+                <textarea style="height: 100%;" name="content" placeholder="请输入发表内容" class="layui-textarea editor"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<!--自定义右键菜单html代码-->
+<div id="menu">
+    <div class="menu"><a>编辑</a></div>
+    <div class="menu"><a>删除</a></div>
+</div>
+
+<script src="https://www.layuicdn.com/layui/layui.js"></script>
+<script src="js/markdown-it.min.js"></script>
+<script src="//cdn.smallyoung.cn/libs/js/prism.js"></script>
+<script>
+    layui.config({
+        base: 'layui_exts/'
+    }).extend({
+        easyeditor: 'easyeditor'
+    }).use(['element', 'jquery', 'easyeditor', 'form'], function () {
+        var element = layui.element,
+            $ = layui.$,
+            form = layui.form,
+            easyeditor = layui.easyeditor;
+
+        // window.oncontextmenu=function(e){
+        //     //取消默认的浏览器自带右键 很重要！！
+        //     e.preventDefault();
+        //     //获取我们自定义的右键菜单
+        //     var menu=document.querySelector("#menu");
+        //     //根据事件对象中鼠标点击的位置，进行定位
+        //     menu.style.left=e.clientX+'px';
+        //     menu.style.top=e.clientY+'px';
+        //
+        //     //改变自定义菜单的高宽，让它显示出来
+        //     menu.style.height='125px';
+        //     menu.style.width='130px';
+        // }
+        //关闭右键菜单，很简单
+        window.onclick=function(e){
+            //用户触发click事件就可以关闭了，因为绑定在window上，按事件冒泡处理，不会影响菜单的功能
+            // document.querySelector('#menu').style.height=0;
+            $("#menu").hide();
+        }
+
+        $("#menus .layui-nav-item").mousedown(function (e){
+            if(e.which === 3){
+                $(document).bind("contextmenu", function(){ return false; });
+                //获取我们自定义的右键菜单
+                $("#menu").show();
+                var menu=document.querySelector("#menu");
+                //根据事件对象中鼠标点击的位置，进行定位
+                menu.style.left=e.clientX+'px';
+                menu.style.top=e.clientY+'px';
+                //改变自定义菜单的高宽，让它显示出来
+                menu.style.width='80px';
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

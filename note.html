@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>My 云笔记</title>
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css">
+    <!-- 编辑器样式  -->
+    <link rel="stylesheet" href="css/easyeditor.css">
+    <!-- 图标  -->
+    <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_2356771_3eaiv2gdkow.css"/>
+    <style>
+        .add a{
+            font-size: 24px;
+            text-align: center;
+        }
+        #menu{
+            z-index: 999;
+            width: 0;       /*设置为0 隐藏自定义菜单*/
+            height: 55px;
+            overflow: hidden;      /*隐藏溢出的元素*/
+            box-shadow: 0 1px 1px #888,1px 0 1px #ccc;
+            background-color: #fff;
+            position: absolute;      /*自定义菜单相对与body元素进行定位*/
+            line-height: 36px;
+            padding: 5px 0;
+            text-align: center;
+            color: #fff;
+            color: rgba(255,255,255,.7);
+            transition: all .3s;
+            -webkit-transition: all .3s;
+        }
+        .menu{
+            height: 25px;
+            line-height: 25px;
+            padding: 0 10px;
+            font-size: 14px;
+        }
+        .menu:hover{
+            background-color: #f2f2f2;
+        }
+        .menu a{
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">My 云笔记</div>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item" id="logout"><a>退了</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" id="menus"></ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px; height: 90%;">
+            <div class="layui-form" lay-filter="markdown" style="height: 100%">
+                <!-- Markdown编辑器元素 -->
+                <textarea style="height: 100%;" name="content" placeholder="请输入发表内容" class="layui-textarea editor"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--自定义右键菜单html代码-->
+<div id="menu">
+    <div class="menu" data-type="edit"><a>编辑</a></div>
+    <div class="menu" data-type="del"><a>删除</a></div>
+</div>
+
+<script src="https://www.layuicdn.com/layui/layui.js"></script>
+<script src="js/markdown-it.min.js"></script>
+<script src="//cdn.smallyoung.cn/libs/js/prism.js"></script>
+<script>
+    layui.config({
+        base: 'layui_exts/'
+    }).extend({
+        easyeditor: 'easyeditor'
+    }).use(['element', 'jquery', 'easyeditor', 'form'], function () {
+        var element = layui.element,
+            $ = layui.$,
+            form = layui.form,
+            easyeditor = layui.easyeditor;
+
+        var host = "//api.smallyoung.cn";
+
+        if(!localStorage.Authorization){
+            alert("登录已失效，请重新登录");
+            window.location.href = 'index.html';
+        }
+
+        var headers = {
+            Authorization: localStorage.Authorization
+        }
+
+        window.onclick=function(e){
+            //用户触发click事件就可以关闭了，因为绑定在window上，按事件冒泡处理，不会影响菜单的功能
+            // document.querySelector('#menu').style.height=0;
+            $("#menu").hide();
+        }
+
+        function req(options){
+            var that = this
+                ,success = options.success
+                ,error = options.error;
+
+            delete options.success;
+            delete options.error;
+
+            return $.ajax($.extend({
+                type: 'GET'
+                ,headers:headers
+                ,dataType: 'json'
+                ,success: function(res, textStatus, req){
+                    if (res.code === 200){
+                        localStorage.Authorization = req.getResponseHeader("Authorization") || localStorage.Authorization;
+                        headers = {
+                            Authorization: localStorage.Authorization
+                        }
+                        typeof success === 'function' && success(res);
+                    }else if(res.code === 401){
+                        alert("登录已失效，请重新登录");
+                        window.location.href = 'index.html';
+                    }else{
+                        layer.closeAll();
+                        layer.msg(res.msg, {icon:2});
+                    }
+                }
+                ,error: function(e, code){
+                    typeof error === 'function' && error(res);
+                }
+            }, options));
+        }
+
+        function save(){
+            $(".icon-baocun").addClass("icon-jiazaizhong").removeClass("icon-baocun");
+            var data = form.val("markdown");
+            data.id = $(".layui-this").data("id");
+            req({
+                type: "POST",
+                url: host + "/note/updateContent",
+                data: data,
+                success: function (res, textStatus, req) {
+                    $(".icon-jiazaizhong").addClass("icon-baocun").removeClass("icon-jiazaizhong");
+                }
+            });
+        }
+
+        layer.load();
+
+        req({
+            url: host + "/note",
+            success: function(res){
+                $('#menus li').remove();
+                if (res.data.menus) {
+                    $.each(res.data.menus, function (index, item) {
+                        if (index === 0) {
+                            $('#menus').append('<li class="layui-nav-item layui-this" data-id="' + item.id + '"><a>' + item.name + '</a></li>');
+                        } else {
+                            $('#menus').append('<li class="layui-nav-item" data-id="' + item.id + '"><a>' + item.name + '</a></li>');
+                        }
+                    });
+                    form.val("markdown", {
+                        "content": res.data.content ? easyeditor.escape(unescape((res.data.content))) : ""
+                    });
+                    if (res.data.menus.length > 0) {
+                        easyeditor.init({
+                            elem: '.editor'
+                            , uploadUrl: function (){
+                                return host + '/note/uploadImg/' + $(".layui-this").data("id")
+                            }
+                            , uploadResultUrl: '//cdn.smallyoung.cn'
+                            , headers: headers
+                            , uploadResultCode: 200
+                            , uploadResultMsg: 'message'
+                            , uploadSize: '2048'
+                            , style: 'fangge'
+                            , save: function (editor) {
+                                save()
+                            }
+                        });
+                    }
+                }
+                $('#menus').append('<li class="layui-nav-item add" data-id="add"><a>+</a></li>');
+                checkMenusEven()
+                layer.closeAll();
+            }
+        });
+
+
+        function checkMenusEven(){
+            $("#menus li").mousedown(function (e) {
+                var that = this;
+                var id = $(that).data("id");
+                if(e.which === 1){
+                    if('add' === id){
+                        layer.prompt({title: '添加笔记', formType: 0}, function(text, index){
+                            layer.close(index);
+                            layer.load();
+                            req({
+                                type: "POST",
+                                url: host + "/note/addMenus",
+                                data:{
+                                    name: text
+                                },
+                                success: function (res) {
+                                    $('.add').remove();
+                                    $('#menus').append('<li class="layui-nav-item" data-id="' + res.data.id + '"><a>' + res.data.name + '</a></li>');
+                                    $('#menus').append('<li class="layui-nav-item add" data-id="add"><a>+</a></li>');
+                                    checkMenusEven();
+                                    layer.closeAll();
+                                }
+                            });
+                        });
+                    }else{
+                        layer.load();
+                        req({
+                            url: host +  "/note/getContentById",
+                            data:{
+                                id: id
+                            },
+                            success: function (res) {
+                                form.val("markdown", {
+                                    "content": res.data ? easyeditor.escape(unescape((res.data))) : ""
+                                });
+                                $(".layui-nav-item").removeClass("layui-this");
+                                $(that).addClass("layui-this");
+                                layer.closeAll();
+                            }
+                        });
+                    }
+                }else if(e.which === 3){
+                    $(document).bind("contextmenu", function(){ return false; });
+                    //获取我们自定义的右键菜单
+                    $("#menu").show();
+                    var menu=document.querySelector("#menu");
+                    //根据事件对象中鼠标点击的位置，进行定位
+                    menu.style.left=e.clientX+'px';
+                    menu.style.top=e.clientY+'px';
+                    //改变自定义菜单的高宽，让它显示出来
+                    menu.style.width='80px';
+                    $("#menu div").unbind("click");
+
+                    $("#menu div").click(function(){
+                        var type = $(this).data("type");
+                        if("edit" === type){
+                            layer.prompt({title: '修改笔记名称', value: $(that).find("a").html()}, function(text, index){
+                                layer.close(index);
+                                layer.load();
+                                req({
+                                    type: "POST",
+                                    url: host +  "/note/updateMenus",
+                                    data:{
+                                        id: id,
+                                        name:text
+                                    },
+                                    success: function (res) {
+                                        $(that).find("a").html(text);
+                                        layer.closeAll();
+                                        layer.msg('修改成功');
+                                    }
+                                });
+                            });
+                        }else if("del" === type){
+                            layer.confirm('确定删除此笔记吗？', function (index) {
+                                layer.close(index);
+                                layer.load();
+                                req({
+                                    type: "DELETE",
+                                    url: host +  "/note/delMenus",
+                                    data:{
+                                        id: id
+                                    },
+                                    success: function (res) {
+                                        if($(that).hasClass("layui-this")){
+                                            $(that).remove();
+                                            var id = $("#menus li:first").data("id");
+                                            if(id){
+                                                req({
+                                                    url: host +  "/note/getContentById",
+                                                    data:{
+                                                        id: id
+                                                    },
+                                                    success: function (res) {
+                                                        form.val("markdown", {
+                                                            "content": res.data ? easyeditor.escape(unescape((res.data))) : ""
+                                                        });
+                                                        $("#menus li:first").addClass("layui-this");
+                                                    }
+                                                });
+                                            }
+                                        }else{
+                                            $(that).remove();
+                                        }
+                                        layer.closeAll();
+                                        layer.msg('您删除了笔记');
+                                    }
+                                });
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        $("#logout").click(function (){
+            req({
+                type: "POST",
+                url: host +  "/logout",
+                success: function () {
+                    localStorage.removeItem("Authorization");
+                    window.location.href = 'index.html';
+                }
+            });
+        });
+    });
+</script>
+</body>
+
+</html>

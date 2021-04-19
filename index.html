@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="css/index.css"/>
+    <style>
+        .bg{
+            float: left;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            -webkit-filter: blur(8px);
+            -moz-filter: blur(8px);
+            -o-filter: blur(8px);
+            -ms-filter: blur(8px);
+            filter: blur(8px);
+        }
+        .test{
+            width:300px;
+            height: 180px;
+            padding:80px 20px;
+            margin-left:50%;
+            margin-top: 4%;
+            background:#beceeb;
+            -webkit-border-top-left-radius:220px 120px;
+            -webkit-border-top-right-radius:220px 120px;
+            -webkit-border-bottom-right-radius:220px 120px;
+            -webkit-border-bottom-left-radius:220px 120px;
+            -moz-border-radius:220px / 120px;
+            border-radius:220px / 120px;
+            position:absolute;
+        }
+        .test span{width:0; height:0; font-size:0; background:#beceeb; overflow:hidden; position:absolute;}
+        .test span.bot{
+            width:30px;
+            height:30px;
+            -moz-border-radius:30px;
+            -webkit-border-radius:30px;
+            border-radius:30px;
+            left:10px;
+            bottom:-20px;
+        }
+        .test span.top{
+            width:15px;
+            height:15px;
+            -moz-border-radius:15px;
+            -webkit-border-radius:15px;
+            border-radius:15px;
+            left:0px;
+            bottom:-40px;
+        }
+        .test .text{
+            font-size: 13px;
+            line-height: 19px;
+            margin-top: -8%;
+        }
+    </style>
+</head>
+<body>
+<div class="bg"></div>
+<div>
+    <div class="chick">
+        <div class="chick-head"></div>
+        <div class="chick-body"></div>
+        <div class="eye">
+            <span></span>
+            <span></span>
+        </div>
+        <div class="blusher">
+            <span></span>
+            <span></span>
+        </div>
+        <div class="face"></div>
+        <div class="wing-left"></div>
+        <div class="wing-content">
+            <span></span>
+        </div>
+        <div class="wing-right">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <div class="food">
+                <p></p>
+                <div class="dot-box">
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div class="mouth">
+            <span></span>
+            <span></span>
+            <p></p>
+        </div>
+        <div class="foot">
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <div class="test">
+        <span class="bot"></span>
+        <span class="top"></span>
+        <div class="text">
+            1、目前仅支持支付宝扫码登录</br>
+            2、本网站为个人开发，无维护团队，安全性无法保证，请勿将敏感信息暴露
+        </div>
+    </div>
+</div>
+<script src="//cdn.smallyoung.cn/libs/js/jquery-3.5.1.min.js"></script>
+<script type="text/javascript">
+    $.get("https://api.no0a.cn/api/bing/0", function (res){
+        if(res.bing && res.bing.url){
+            $(".bg").css("background-image", "url("+res.bing.url+")");
+        }
+    })
+    $(".chick").click(function (){
+       window.location.href = 'https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2021002126630407&scope=auth_base&redirect_uri=https://note.smallyoung.cn/login.html';
+    });
+</script>
+</body>
+</html>
